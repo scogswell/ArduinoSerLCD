@@ -1,0 +1,15 @@
+SerLCD	KEYWORD1
+print	KEYWORD2
+clear	KEYWORD2
+setPosition	KEYWORD2
+cursorRight	KEYWORD2
+cursorLeft	KEYWORD2
+scrollRight	KEYWORD2
+scrollLeft	KEYWORD2
+displayOff	KEYWORD2
+displayOn	KEYWORD2
+underlineCursorOn	KEYWORD2
+underlineCursorOff	KEYWORD2
+boxCursorOn	KEYWORD2
+boxCursorOff	KEYWORD2
+setBacklight	KEYWORD2
