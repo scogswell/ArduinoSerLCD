@@ -1,17 +1,31 @@
 /******************************************************************************* 
 SerLCD - A library to use Sparkfun's SerLCD v2.5 backpack devices with the Arduino
-Copyright (C) 2010 Steven Cogswell
+Copyright (C) 2010-2013 Steven Cogswell
 
 http://www.sparkfun.com/commerce/product_info.php?products_id=258
 http://www.sparkfun.com/commerce/product_info.php?products_id=9395
 http://www.sparkfun.com/datasheets/LCD/SerLCD_V2_5.PDF
 
-Version 20101108A.   
+Version 20130711A.
+
+Version History:
+20130711A:
+
+- Compatibility with the Arduino 1.0+ library specifications.  
+- Changes to support Arduino IDE 1.0 (tested with IDE 1.0.5):
+	- NewSoftSerial now part of Arduino Core as SoftwareSerial
+	- print(value, BYTE) deprecated, replaced with write(value); 
+	- size_t types for virtual write() function. 
+	
+Due to the Arduino IDE 1.0 changes, this may not work on older versions of the 
+Arduino IDE.  Your mileage may vary.  
 
 I have only tested this with the 5v 2x16 display.  Your mileage may vary.  
+I tested the 20130711A version with an Arduino UNO r2.   
 
-This requires NewSoftSerial, available from http://arduiniana.org, which lets you run
-Serial Port style communications on pins other than the hardware pins.  
+Originally this library required NewSoftSerial, available from http://arduiniana.org, 
+which lets you run Serial Port style communications on pins other than the hardware pins.
+As of version 20130711A NewSoftSerial is replaced with the Arduino Core SoftwareSerial  
 
 As usual, I wrote this for myself, and it works for me.  It may not work for you, in 
 which case I sympathize.  
@@ -36,8 +50,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef SerLCD_h
 #define SerLCD_h
 
-#include "WProgram.h"
-#include "NewSoftSerial.h"
+// Compatibility with the Arduino 1.0 library standard
+#if defined(ARDUINO) && ARDUINO >= 100  
+#include "Arduino.h"  
+#else  
+#include "WProgram.h"   
+#endif
+
+#include "SoftwareSerial.h"
 #include <inttypes.h>
 #include "Print.h"
 
@@ -48,8 +68,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 class SerLCD : public Print
 {
 	public:
-		SerLCD(NewSoftSerial &_SerTX); 
-		SerLCD(NewSoftSerial &_SerTX, int _columns, int _rows);
+		SerLCD(SoftwareSerial &_SerTX); 
+		SerLCD(SoftwareSerial &_SerTX, int _columns, int _rows);
 		void begin(); 
 		void clear(); 
 		void setPosition(int row, int col);
@@ -66,8 +86,8 @@ class SerLCD : public Print
 		void setBacklight(int value);
 
 	private: 
-		NewSoftSerial *SerTX; 
-		void write(uint8_t byte);
+		SoftwareSerial *SerTX; 
+		size_t write(uint8_t byte);
 		int columns, rows; 
 };
 

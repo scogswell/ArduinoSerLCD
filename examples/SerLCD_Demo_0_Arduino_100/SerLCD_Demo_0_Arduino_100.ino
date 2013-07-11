@@ -1,24 +1,18 @@
-#include <NewSoftSerial.h>
+#include <SoftwareSerial.h>
 #include <SerLCD.h>
 
-/*  
+// This Arduino sketch demonstrates using my SerLCD library
+// Steven Cogswell 
 
-This Arduino sketch demonstrates using my SerLCD library
-
-Steven Cogswell 
-
-*/
-
-
-// Make a NewSoftSerial object, and a new SerLCD object, 
+// Make a SoftwareSerial object, and a new SerLCD object, 
 // which points at the NewSoftSerial object. 
 //
 // In this demo the Rx pin of the SerLCD is connected to 
-// Arduino digital pin 2 (Tx)  We set the NewSoftSerial 
+// Arduino digital pin 2 (Tx)  We set the SoftwareSerial 
 // Rx to 0 because the SerLCD has no facility to transmit
 // back. 
 //
-NewSoftSerial NSS(0,2);
+SoftwareSerial NSS(0,2);
 SerLCD theLCD(NSS); 
 
 
@@ -45,12 +39,17 @@ void loop()
   theLCD.print("Steven Cogswell"); 
   delay(1000); 
   theLCD.clear(); 
-  theLCD.setPosition(1,8); 
-  theLCD.print("(C)");
-  delay(1000); 
-  theLCD.setPosition(2,8); 
-  theLCD.print("2010"); 
-  delay(1000); 
+  theLCD.setPosition(1,0); 
+  theLCD.print("Compatible with");
+  theLCD.setPosition(2,0);
+  theLCD.print("Arduino 1.0+");   
+  delay(2000);
+  theLCD.clear();  
+  theLCD.setPosition(1,0); 
+  theLCD.print("(C) 2010-2013");
+  theLCD.setPosition(2,0); 
+  theLCD.print("LGPL 2.1 Licence"); 
+  delay(2000); 
   
   // Display on and off
   theLCD.displayOff(); 
@@ -137,12 +136,15 @@ void loop()
   // Print some integers 
   theLCD.clear(); 
   theLCD.print("Some numbers:");
-  for(int i = 0; i<100; i++) 
+  for(int i = -10; i<100; i++) 
   {
+    theLCD.setPosition(1,13);
+    theLCD.print("   ");
     theLCD.setPosition(1,13);
     theLCD.print(i); 
     delay(200); 
   }
+  delay(1000);
   
   // Print some floating point numbers, showing the leveraging of Print::print class
   // with no code needing to be written for SerLCD's class. 
@@ -160,8 +162,13 @@ void loop()
   delay(2000); 
   
   // Strange looking throbber
+  theLCD.clear();
+  theLCD.setPosition(1,0); 
+  theLCD.print("Strange");
+  theLCD.setPosition(2,0);
+  theLCD.print("Throbbers"); 
   int j=0; 
-  for(int i=0; i<100; i++) 
+  for(int i=0; i<=50; i++) 
   {
      j++; 
      theLCD.setPosition(1,15); 

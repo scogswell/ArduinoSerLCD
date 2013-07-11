@@ -2,7 +2,7 @@
 SerLCD - A library to use Sparkfun's SerLCD v2.5 backpack devices with the Arduino
 Copyright (C) 2010 Steven Cogswell
 
-Version 20101108A.   
+Version 20130711A.   
 
 See SerLCD.h for version history. 
 
@@ -23,28 +23,34 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 	
 ***********************************************************************************/
 
-#include "WProgram.h"
-#include "NewSoftSerial.h"
+// Compatibility with the Arduino 1.0 library standard
+#if defined(ARDUINO) && ARDUINO >= 100  
+#include "Arduino.h"  
+#else  
+#include "WProgram.h"   
+#endif
+
+#include "SoftwareSerial.h"    // Arduino 1.0+ includes NewSoftSerial as SoftwareSerial
 #include "SerLCD.h"
 
 // Constructor, to which you pass a previously generated NewSoftSerial  Object 
 // e.g. - 
-//   NewSoftSerial NSS(0,2);   // Note that SerLCD only has Rx and no Tx, so only really need a Tx from Arduino
+//   SoftwareSerial NSS(0,2);   // Note that SerLCD only has Rx and no Tx, so only really need a Tx from Arduino
 //   SerLCD theLCD(NSS); 
 // This will default to 16 columns, 2 row LCD.  Use the other constructor for more options. 
-SerLCD::SerLCD(NewSoftSerial &_SerTX)
+SerLCD::SerLCD(SoftwareSerial &_SerTX)
 {
 	SerTX = &_SerTX; 
 	columns=16;
 	rows=2;
 }
 
-// Constructor, to which you pass a previously generated NewSoftSerial  Object 
+// Constructor, to which you pass a previously generated SoftwareSerial  Object 
 // and the rows and columns of your LCD 
 // e.g. - 
-//   NewSoftSerial NSS(0,2);
+//   SoftwareSerial NSS(0,2);
 //   SerLCD theLCD(NSS,16,2); 
-SerLCD::SerLCD(NewSoftSerial &_SerTX, int _columns, int _rows)
+SerLCD::SerLCD(SoftwareSerial &_SerTX, int _columns, int _rows)
 {
 	SerTX = &_SerTX; 
 	columns=_columns;
@@ -63,17 +69,17 @@ void SerLCD::begin()
 // Clears the SerLCD display.   
 void SerLCD::clear() 
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); // commmand 
-    SerTX->print(0x01,BYTE);   // Clear LCD
+	SerTX->write(SERLCD_COMMAND); // commmand 
+    SerTX->write(0x01);   // Clear LCD
 }
 
 // Uses the virutal "write" of the Print::print class to pass all "print" statements
 // through to the Print::print class.  This gets the bonus of less compiled code and 
 // all the flexibility of the existing Print::print class without having to implement 
 // any of it yourself. 
-void SerLCD::write(uint8_t byte)
+size_t SerLCD::write(uint8_t byte)
 {
-	SerTX->print(byte); 
+	SerTX->write(byte); 
 }
 
 // Sets the position of the cursor on the SerLCD.   Sparkfun uses absolute positions
@@ -105,78 +111,78 @@ void SerLCD::setPosition(int row, int col)
 	}
 		
 	pos=pos+128;   // Cursor move command
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(pos,BYTE); 
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(pos); 
 }
 
 // Move the cursor one space to the right 
 void SerLCD::cursorRight()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x14,BYTE); 
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x14); 
 }
 
 // Move the cursor one space to the left 
 void SerLCD::cursorLeft()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x10,BYTE); 
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x10); 
 }
 
 // Scroll the entire display one position to the right 
 void SerLCD::scrollRight()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x1C,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x1C);
 }
 
 // Scroll the entire display one position to the left 
 void SerLCD::scrollLeft()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x18,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x18);
 }
 
 // Turn off the display.  Does not affect backlight setting. 
 void SerLCD::displayOff() 
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x08,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x08);
 }
 
 // Turn display on.  Does not affect backlight setting. 
 void SerLCD::displayOn() 
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x0C,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x0C);
 }
 
 // Turns on the "underline"  (" _ ") style cursor 
 void SerLCD::underlineCursorOn()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x0E,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x0E);
 }
 
 // Turns off the underline cursor.  Technically turns off the box cursor since it's the same command 
 void SerLCD::underlineCursorOff()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x0C,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x0C);
 }
 
 // Turns on the "Box" style cursor
 void SerLCD::boxCursorOn()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x0D,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x0D);
 }
 
 // Turns off the box cursor.  Technically turns off the underline cursor since it's the same command 
 void SerLCD::boxCursorOff()
 {
-	SerTX->print(SERLCD_COMMAND,BYTE); 
-	SerTX->print(0x0C,BYTE);
+	SerTX->write(SERLCD_COMMAND); 
+	SerTX->write(0x0C);
 }
 
 // Set the backlight intensity level.  According to the Sparkfun 2.5 document, acceptable values 
@@ -193,8 +199,8 @@ void SerLCD::setBacklight(int value)
 		value=128;
 	}
 
-	SerTX->print(SERLCD_BACKLIGHT_COMMAND,BYTE); 
+	SerTX->write(SERLCD_BACKLIGHT_COMMAND); 
 	delay(SERLCD_BACKLIGHT_COMMAND_DELAY_MS); // A brief delay, or it seems the SerLCD will hang up. 
-	SerTX->print(value,BYTE);
+	SerTX->write(value);
 	delay(SERLCD_BACKLIGHT_COMMAND_DELAY_MS); // A brief delay, or it seems the SerLCD will hang up. 
 }
