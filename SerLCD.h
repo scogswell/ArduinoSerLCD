@@ -6,7 +6,7 @@ http://www.sparkfun.com/commerce/product_info.php?products_id=258
 http://www.sparkfun.com/commerce/product_info.php?products_id=9395
 http://www.sparkfun.com/datasheets/LCD/SerLCD_V2_5.PDF
 
-Version 20130711A.
+Version 20130712A.
 
 Version History:
 20130711A:
@@ -17,11 +17,16 @@ Version History:
 	- print(value, BYTE) deprecated, replaced with write(value); 
 	- size_t types for virtual write() function. 
 	
+20130712A:
+
+- Arduino core deprecated print(variable,BYTE), so made the write() method not private
+  (I wanted to be able to print a degree symbol)
+	
 Due to the Arduino IDE 1.0 changes, this may not work on older versions of the 
 Arduino IDE.  Your mileage may vary.  
 
 I have only tested this with the 5v 2x16 display.  Your mileage may vary.  
-I tested the 20130711A version with an Arduino UNO r2.   
+I tested this version with an Arduino UNO r2.   
 
 Originally this library required NewSoftSerial, available from http://arduiniana.org, 
 which lets you run Serial Port style communications on pins other than the hardware pins.
@@ -84,10 +89,11 @@ class SerLCD : public Print
 		void boxCursorOn();
 		void boxCursorOff();
 		void setBacklight(int value);
+		size_t write(uint8_t byte);  // If this is public, we can use SerLCD->write() for custom characters
 
 	private: 
 		SoftwareSerial *SerTX; 
-		size_t write(uint8_t byte);
+		//size_t write(uint8_t byte);    // changed to public due to deprecation of Arduino's print(variable,BYTE) mode.  "use write() instead"
 		int columns, rows; 
 };
 

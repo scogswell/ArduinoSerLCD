@@ -2,8 +2,6 @@
 SerLCD - A library to use Sparkfun's SerLCD v2.5 backpack devices with the Arduino
 Copyright (C) 2010 Steven Cogswell
 
-Version 20130711A.   
-
 See SerLCD.h for version history. 
 
 This library is free software; you can redistribute it and/or
