@@ -13,20 +13,27 @@ Version History:
 
 - Compatibility with the Arduino 1.0+ library specifications.  
 - Changes to support Arduino IDE 1.0 (tested with IDE 1.0.5):
-	- NewSoftSerial now part of Arduino Core as SoftwareSerial
-	- print(value, BYTE) deprecated, replaced with write(value); 
-	- size_t types for virtual write() function. 
+- NewSoftSerial now part of Arduino Core as SoftwareSerial
+- print(value, BYTE) deprecated, replaced with write(value); 
+- size_t types for virtual write() function. 
 	
 20130712A:
 
 - Arduino core deprecated print(variable,BYTE), so made the write() method not private
-  (I wanted to be able to print a degree symbol)
+(I wanted to be able to print a degree symbol)
+  
+20131030A:
+
+- Verified compatibility with the Sparkfun 20x4 5v LCD.   Includes a new demo program
+specifically for the 20x4 unit. 
+- All command sequences get a delay of SERLCD_SHORT_DELAY to improve reliability.
+Default is 10 ms, but you can change that in serlcd.h if you want.  
 	
 Due to the Arduino IDE 1.0 changes, this may not work on older versions of the 
 Arduino IDE.  Your mileage may vary.  
 
-I have only tested this with the 5v 2x16 display.  Your mileage may vary.  
-I tested this version with an Arduino UNO r2.   
+I have only tested this with the 5v 16x2, and 5v 20x4 display.  Your mileage may vary.  
+I tested this version with an Arduino UNO R2, and an UNO R3.   
 
 Originally this library required NewSoftSerial, available from http://arduiniana.org, 
 which lets you run Serial Port style communications on pins other than the hardware pins.
@@ -69,6 +76,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define SERLCD_COMMAND 0xFE
 #define SERLCD_BACKLIGHT_COMMAND 0x7C
 #define SERLCD_BACKLIGHT_COMMAND_DELAY_MS 100 
+#define SERLCD_SHORT_DELAY 10
 
 class SerLCD : public Print
 {

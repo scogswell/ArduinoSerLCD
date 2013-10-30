@@ -69,6 +69,7 @@ void SerLCD::clear()
 {
 	SerTX->write(SERLCD_COMMAND); // commmand 
     SerTX->write(0x01);   // Clear LCD
+    delay(SERLCD_SHORT_DELAY);   
 }
 
 // Uses the virutal "write" of the Print::print class to pass all "print" statements
@@ -78,6 +79,7 @@ void SerLCD::clear()
 size_t SerLCD::write(uint8_t byte)
 {
 	SerTX->write(byte); 
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Sets the position of the cursor on the SerLCD.   Sparkfun uses absolute positions
@@ -111,6 +113,7 @@ void SerLCD::setPosition(int row, int col)
 	pos=pos+128;   // Cursor move command
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(pos); 
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Move the cursor one space to the right 
@@ -118,6 +121,7 @@ void SerLCD::cursorRight()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x14); 
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Move the cursor one space to the left 
@@ -125,6 +129,7 @@ void SerLCD::cursorLeft()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x10); 
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Scroll the entire display one position to the right 
@@ -132,6 +137,7 @@ void SerLCD::scrollRight()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x1C);
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Scroll the entire display one position to the left 
@@ -139,6 +145,7 @@ void SerLCD::scrollLeft()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x18);
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Turn off the display.  Does not affect backlight setting. 
@@ -146,13 +153,15 @@ void SerLCD::displayOff()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x08);
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Turn display on.  Does not affect backlight setting. 
 void SerLCD::displayOn() 
 {
 	SerTX->write(SERLCD_COMMAND); 
-	SerTX->write(0x0C);
+	SerTX->write(0x0C);    
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Turns on the "underline"  (" _ ") style cursor 
@@ -160,6 +169,7 @@ void SerLCD::underlineCursorOn()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x0E);
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Turns off the underline cursor.  Technically turns off the box cursor since it's the same command 
@@ -167,6 +177,7 @@ void SerLCD::underlineCursorOff()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x0C);
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Turns on the "Box" style cursor
@@ -174,6 +185,8 @@ void SerLCD::boxCursorOn()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x0D);
+	delay(SERLCD_SHORT_DELAY);   
+
 }
 
 // Turns off the box cursor.  Technically turns off the underline cursor since it's the same command 
@@ -181,6 +194,7 @@ void SerLCD::boxCursorOff()
 {
 	SerTX->write(SERLCD_COMMAND); 
 	SerTX->write(0x0C);
+	delay(SERLCD_SHORT_DELAY);   
 }
 
 // Set the backlight intensity level.  According to the Sparkfun 2.5 document, acceptable values 
